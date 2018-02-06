@@ -1,6 +1,6 @@
 # Slurm Workload Manager for Microsoft Azure. 
 
-It's easy to deploy a Slurm cluster to Microsoft Azure!  The Azure template on this page helps you quickly create and configure a Slurm cluster running Ubuntu 16.04 (LTS).  
+It's easy to deploy a Slurm cluster to Microsoft Azure!  The Azure template on this page will help you quickly create and configure a Slurm cluster running Ubuntu 16.04 (LTS).  
 
 When you're done, you'll have an operational Slurm cluster consisting of:
 
@@ -10,15 +10,16 @@ When you're done, you'll have an operational Slurm cluster consisting of:
 * Full configuration of Slurm and related binaries.  This includes the creation of a cluster wide administrator user, automatic startup of Slurm processes at boot, and configuration of Slurm compute parameters to match the processor and memory configuration of the underlying virtual machines
 * An NFS shared directory called "/data" accesible across all nodes
 
-Our Slurm4Azure repository is based on the "slurm" repository found here: https://github.com/Azure/azure-quickstart-templates/tree/master/slurm
+NOTE: The Slurm workers created by this template are individual virtual machines and not part of an Azure Virtual Machine Scale Set.  We'll enhance functionality in the future to use VM Scale Sets.  For now, onwards!
 
-NOTE: The Slurm workers created by this template are individual vitual machines and not part of an Azure Virtual Machine Scale Set.  We'll look to enhance functionality in the future.  Onwards!
+Our Slurm4Azure repository is based on the "slurm" repository found here: 
+* https://github.com/Azure/azure-quickstart-templates/tree/master/slurm
 
 # Let's Get Started!
 
 Begin deploying your Slurm cluster by clicking the Deploy to Azure button below.  You'll be able to adjust:
 
-* Azure region you wish to deploy.  Our deault is West US.
+* Azure region you wish to target.  Our deault is West US.
 * Azure Resource Group.  We strongly recommend you create a new Resource Group.
 * Username and Password of the cluster-wide Slurm administrator. 
   * The default username is "slurmadmin"
