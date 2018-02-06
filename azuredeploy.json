@@ -17,7 +17,7 @@
     },
     "vmHeadNodeSize": {
       "type": "string",
-      "defaultValue": "Standard_F4s",
+      "defaultValue": "Standard_E2_v3",
       "metadata": {
         "description": "Size of the master node. Get the options here: https://azureprice.net/"
       }
@@ -31,7 +31,7 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_F4s",
+      "defaultValue": "Standard_E2_v3",
       "metadata": {
         "description": "Size of the worker node(s). Get the options here: https://azureprice.net/"
       }

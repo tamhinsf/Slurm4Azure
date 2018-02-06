@@ -176,10 +176,10 @@ do
       sudo cp -f /data/tmp/slurm.conf /etc/slurm-llnl/slurm.conf
       sudo chown slurm /etc/slurm-llnl/slurm.conf
       sudo slurmd
+      sudo echo "Installing packages required by Canu.  These can be removed if you don't need them."
       sudo apt-get install openjdk-8-jdk -y
       sudo apt-get install libgomp1 -y
       sudo apt-get install gnuplot -y
-      sudo touch /data/tmp/`hostname`-done
 ENDSSH1
    i=`expr $i + 1`
 done
@@ -190,7 +190,5 @@ sudo rm -f /data/tmp/*
 
 # Write a file called done in the $ADMIN_USERNAME home directory to let the user know we're all done
 sudo -u $ADMIN_USERNAME touch /home/$ADMIN_USERNAME/done
-
-# Restart slurm service on all nodes
 
 exit 0
