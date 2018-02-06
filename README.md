@@ -1,4 +1,4 @@
-# Slurm Workload Manager for Microsoft Azure. 
+# Slurm Workload Manager for Microsoft Azure
 
 It's easy to deploy a Slurm cluster to Microsoft Azure!  The Azure template on this page will help you quickly create and configure a Slurm cluster running Ubuntu 16.04 (LTS).  
 
