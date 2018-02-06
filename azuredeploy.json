@@ -15,6 +15,13 @@
         "description": "Admin password. Pick a complex password with uppercase letters, lowercase letters, digits, and symbols. The password should not be longer than 16. Otherwise you'll get a BadRequest error."
       }
     },
+    "vmHeadNodeSize": {
+      "type": "string",
+      "defaultValue": "Standard_DS3_v2",
+      "metadata": {
+        "description": "Size of the head done. Get the options here: https://azureprice.net/"
+      }
+    },
     "vmSize": {
       "type": "string",
       "defaultValue": "Standard_DS3_v2",
@@ -146,7 +153,7 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
+          "vmSize": "[parameters('vmHeadNodeSize')]"
         },
         "osProfile": {
           "computerName": "[variables('vmNameMaster')]",

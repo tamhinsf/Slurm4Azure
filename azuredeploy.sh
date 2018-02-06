@@ -97,9 +97,6 @@ sudo apt-get update >> /tmp/azuredeploy.log.$$ 2>&1
 sudo chmod g-w /var/log >> /tmp/azuredeploy.log.$$ 2>&1 # Must do this before munge will generate key
 sudo apt-get install slurm-llnl -y >> /tmp/azuredeploy.log.$$ 2>&1
 
-# Install OpenMPI
-sudo apt install openmpi-bin -y
-
 # Make a slurm spool directory
 sudo mkdir /var/spool/slurm
 sudo chown slurm /var/spool/slurm
@@ -168,7 +165,6 @@ do
       sudo mkdir /var/spool/slurm
       sudo chown slurm /var/spool/slurm
       sudo apt-get update
-      sudo apt install openmpi-bin -y
       sudo apt-get install slurm-llnl -y
       sudo cp -f /tmp/munge.key /etc/munge/munge.key
       sudo chown munge /etc/munge/munge.key
@@ -180,7 +176,7 @@ do
       sudo apt-get install openjdk-8-jdk -y
       sudo apt-get install libgomp1 -y
       sudo apt-get install gnuplot -y
-      sudo touch /data/tmp/`hostname`-done
+      sudo sh -c "touch /data/tmp/`hostname`-done"
 ENDSSH1
 
    i=`expr $i + 1`
