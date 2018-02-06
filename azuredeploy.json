@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "slurmadmin",
       "metadata": {
-        "description": "User name for the Virtual Machine. Pick a valid username otherwise there will be a BadRequest error."
+        "description": "User name for the Slurm Admin. Pick a valid username otherwise there will be a BadRequest error."
       }
     },
     "adminPassword": {
@@ -17,23 +17,30 @@
     },
     "vmHeadNodeSize": {
       "type": "string",
-      "defaultValue": "Standard_DS3_v2",
+      "defaultValue": "Standard_F4s",
       "metadata": {
-        "description": "Size of the head done. Get the options here: https://azureprice.net/"
+        "description": "Size of the master node. Get the options here: https://azureprice.net/"
+      }
+    },
+    "sharedDiskSize": {
+      "type": "int",
+      "defaultValue": 512,
+      "metadata": {
+        "description": "Size of the shared data disk in GB.  Will exported from the master node and mounted on workers."
       }
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_DS3_v2",
+      "defaultValue": "Standard_F4s",
       "metadata": {
-        "description": "Size of the nodes. Get the options here: https://azureprice.net/"
+        "description": "Size of the worker node(s). Get the options here: https://azureprice.net/"
       }
     },
     "scaleNumber": {
       "type": "int",
       "defaultValue": 2,
       "metadata": {
-        "description": "This template create N worker node. Use scaleNumber to specify that N."
+        "description": "Number of worker nodes to create."
       }
     },
     "_artifactsLocation": {
@@ -41,7 +48,7 @@
       "metadata": {
         "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
       },
-      "defaultValue": "https://raw.githubusercontent.com/tamhinsf/Azure4Slurm/master/"
+      "defaultValue": "https://raw.githubusercontent.com/tamhinsf/Slurm4Azure/master/"
     },
     "_artifactsLocationSasToken": {
       "type": "securestring",
@@ -169,7 +176,7 @@
           },
           "dataDisks": [
             {
-              "diskSizeGB": "512",
+              "diskSizeGB": "[parameters('sharedDiskSize')]",
               "lun": 0,
               "createOption": "Empty"
             }

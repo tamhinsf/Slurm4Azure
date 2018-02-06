@@ -45,12 +45,12 @@ sudo systemctl restart nfs-kernel-server >> /tmp/azuredeploy.log.$$ 2>&1
 sudo -u $ADMIN_USERNAME sh -c "rm -rf /data/tmp"
 sudo -u $ADMIN_USERNAME sh -c "mkdir /data/tmp"
 
-# Create a shared environment variables file and reference it in the login .bashrc file
+# Create a shared environment variables file on /data and reference it in the login .bashrc file
 sudo rm /data/shared-bashrc
 sudo -u $ADMIN_USERNAME touch /data/shared-bashrc
 echo "source /data/shared-bashrc" | sudo -u $ADMIN_USERNAME tee -a /home/$ADMIN_USERNAME/.bashrc 
 
-# Create Workers NFS client install script
+# Create Workers NFS client install script and store it on /data
 sudo rm /data/tmp/workerNfs.sh
 sudo touch /data/tmp/workerNfs.sh
 sudo chmod u+x /data/tmp/workerNfs.sh
@@ -59,15 +59,15 @@ echo "sudo apt-get install nfs-common -y" | sudo tee -a /data/tmp/workerNfs.sh >
 echo "echo \"$MASTER_NAME:/data /data nfs rw,hard,intr 0 0\" | sudo tee -a /etc/fstab " | sudo tee -a /data/tmp/workerNfs.sh  >> /tmp/azuredeploy.log.$$ 2>&1
 echo "sudo sh -c \"mount /data\"" | sudo tee -a /data/tmp/workerNfs.sh >> /tmp/azuredeploy.log.$$ 2>&1
 
-# Update master node
+# Update master node hosts file
 echo $MASTER_IP $MASTER_NAME >> /etc/hosts
 echo $MASTER_IP $MASTER_NAME > /data/tmp/hosts
 
-# Update ssh config file to ignore unknow host
-# Note all settings are for azureuser, NOT root
+# Update ssh config file to ignore unknown hosts
+# Note all settings are for $ADMIN_USERNAME, NOT root
 sudo -u $ADMIN_USERNAME sh -c "mkdir /home/$ADMIN_USERNAME/.ssh/;echo Host worker\* > /home/$ADMIN_USERNAME/.ssh/config; echo StrictHostKeyChecking no >> /home/$ADMIN_USERNAME/.ssh/config; echo UserKnownHostsFile=/dev/null >> /home/$ADMIN_USERNAME/.ssh/config"
 
-# Generate a set of sshkey under /honme/azureuser/.ssh if there is not one yet
+# Generate a set of sshkey under /honme/$ADMIN_USERNAME/.ssh if there is not one yet
 if ! [ -f /home/$ADMIN_USERNAME/.ssh/id_rsa ]; then
     sudo -u $ADMIN_USERNAME sh -c "ssh-keygen -f /home/$ADMIN_USERNAME/.ssh/id_rsa -t rsa -N ''"
 fi
@@ -152,7 +152,9 @@ do
    worker=$WORKER_NAME$i
 
    echo "SCP to $worker"  >> /tmp/azuredeploy.log.$$ 2>&1 
+   # copy NFS mount script over
    sudo -u $ADMIN_USERNAME scp /data/tmp/workerNfs.sh $ADMIN_USERNAME@$worker:/tmp/workerNfs.sh >> /tmp/azuredeploy.log.$$ 2>&1
+   # small hack: munge.key has permission problems when copying from NFS drive.  Fix this later
    sudo -u $ADMIN_USERNAME scp $mungekey $ADMIN_USERNAME@$worker:/tmp/munge.key >> /tmp/azuredeploy.log.$$ 2>&1
    
    echo "Remote execute on $worker" >> /tmp/azuredeploy.log.$$ 2>&1 
@@ -169,6 +171,7 @@ do
       sudo cp -f /tmp/munge.key /etc/munge/munge.key
       sudo chown munge /etc/munge/munge.key
       sudo chgrp munge /etc/munge/munge.key
+      sudo rm -f /tmp/munge.key
       sudo /usr/sbin/munged --force # ignore egregrious security warning
       sudo cp -f /data/tmp/slurm.conf /etc/slurm-llnl/slurm.conf
       sudo chown slurm /etc/slurm-llnl/slurm.conf
@@ -176,15 +179,14 @@ do
       sudo apt-get install openjdk-8-jdk -y
       sudo apt-get install libgomp1 -y
       sudo apt-get install gnuplot -y
-      sudo sh -c "touch /data/tmp/`hostname`-done"
+      sudo touch /data/tmp/`hostname`-done
 ENDSSH1
-
    i=`expr $i + 1`
 done
 
 # Remove temp files on master
 #rm -f $mungekey
-sudo rm -f /data/tmp/workerNfs.sh
+sudo rm -f /data/tmp/*
 
 # Write a file called done in the $ADMIN_USERNAME home directory to let the user know we're all done
 sudo -u $ADMIN_USERNAME touch /home/$ADMIN_USERNAME/done
