@@ -22,7 +22,7 @@
         "description": "Size of the master node. Get the options here: https://azureprice.net/"
       }
     },
-    "masterVmAcceleratedNetworking": {
+    "vmHeadNodeAcceleratedNetworking": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
@@ -43,7 +43,7 @@
         "description": "Size of the worker node(s). Get the options here: https://azureprice.net/"
       }
     },
-    "workerVmAcceleratedNetworking": {
+    "vmAcceleratedNetworking": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
@@ -162,7 +162,7 @@
             }
           }
         ],
-        "enableAcceleratedNetworking" : "[parameters('masterVmAcceleratedNetworking')]"
+        "enableAcceleratedNetworking" : "[parameters('vmHeadNodeAcceleratedNetworking')]"
       }
     },
     {
@@ -259,7 +259,7 @@
             }
           }
         ],
-        "enableAcceleratedNetworking" : "[parameters('workerVmAcceleratedNetworking')]"
+        "enableAcceleratedNetworking" : "[parameters('vmAcceleratedNetworking')]"
       }
     },
     {
