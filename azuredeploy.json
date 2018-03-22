@@ -22,6 +22,13 @@
         "description": "Size of the master node. Get the options here: https://azureprice.net/"
       }
     },
+    "masterVmAcceleratedNetworking": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Enable Accelerated Networking.  Use with caution: only available for certain VM sizes and deploys will fail if you incorrectly turn it on."
+      }
+    },
     "sharedDiskSize": {
       "type": "int",
       "defaultValue": 512,
@@ -34,6 +41,13 @@
       "defaultValue": "Standard_E2_v3",
       "metadata": {
         "description": "Size of the worker node(s). Get the options here: https://azureprice.net/"
+      }
+    },
+    "workerVmAcceleratedNetworking": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Enable Accelerated Networking.  Use with caution: only available for certain VM sizes and deploys will fail if you incorrectly turn it on."
       }
     },
     "scaleNumber": {
@@ -147,7 +161,8 @@
               }
             }
           }
-        ]
+        ],
+        "enableAcceleratedNetworking" : "[parameters('masterVmAcceleratedNetworking')]"
       }
     },
     {
@@ -243,7 +258,8 @@
               }
             }
           }
-        ]
+        ],
+        "enableAcceleratedNetworking" : "[parameters('workerVmAcceleratedNetworking')]"
       }
     },
     {
