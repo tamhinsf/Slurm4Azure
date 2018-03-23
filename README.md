@@ -27,6 +27,8 @@ Begin deploying your Slurm cluster by clicking the Deploy to Azure button below.
     * Our deployment template is unable to determine if your password meets the requirements.  You will end up with deployment failures if you enter a password that doesn't meet the specifications listed above.  
 * Azure VM Series used for both the master and worker nodes
     * Make sure the VM Series you enter is available in the Azure region you target.  Need help? The Azure VM Comparision website will show you the VMs available in a given region  https://azureprice.net/
+    * Optionally, you can enable Accelerated Networking if the VM series you select supports it.  Not sure if it does?  Check the [list of VMs that support Acclerated Networking](https://docs.microsoft.com/en-us/azure/virtual-network/create-vm-accelerated-networking-cli#supported-vm-instances)
+    * WARNING: If you enable Accelerated Networking on a VM series that doesn't support it, your deployment will fail.
 * Size of the cluster-wide shared disk
 * Number of worker nodes
 
