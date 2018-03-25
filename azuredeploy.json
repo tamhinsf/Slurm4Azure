@@ -32,6 +32,7 @@
     "sharedDiskSize": {
       "type": "int",
       "defaultValue": 512,
+      "maxValue": 4095,
       "metadata": {
         "description": "Size of the shared data disk(s) in GB.  Will exported from the master node and mounted on workers."
       }
