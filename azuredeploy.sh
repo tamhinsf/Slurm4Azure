@@ -36,9 +36,11 @@ sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
 if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
-else
+fi
+
+if [ $NUM_OF_DATA_DISKS -gt 1 ]; then  
   letterVar=( {c..f} )
-  letterString=""
+  letterString=
   for ((x=0; x < $NUM_OF_DATA_DISKS ; x++)); do
       letterString+="/dev/sd${letterVar[x]} "
   done
