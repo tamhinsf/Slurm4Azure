@@ -33,7 +33,16 @@
       "type": "int",
       "defaultValue": 512,
       "metadata": {
-        "description": "Size of the shared data disk in GB.  Will exported from the master node and mounted on workers."
+        "description": "Size of the shared data disk(s) in GB.  Will exported from the master node and mounted on workers."
+      }
+    },
+    "sharedDiskNumber": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "maxValue": 10,
+      "metadata": {
+        "description": "Number of shared disks.  Specifying more than 1 will create a single software RAID 0 using all disks."
       }
     },
     "vmSize": {
@@ -101,7 +110,7 @@
       }
     },
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets/', variables('networkSettings').virtualNetworkName, variables('networkSettings').subnet.dse.name)]",
-    "installationCLI": "[concat('sh azuredeploy.sh ', variables('vmNameMaster'), ' ', variables('networkSettings').statics.master, ' ', variables('vmNameWorker'), ' ', variables('networkSettings').statics.workerRange.base, ' ', variables('networkSettings').statics.workerRange.start, ' ', parameters('scaleNumber'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'), ' ', parameters('_artifactsLocation'))]"
+    "installationCLI": "[concat('sh azuredeploy.sh ', variables('vmNameMaster'), ' ', variables('networkSettings').statics.master, ' ', variables('vmNameWorker'), ' ', variables('networkSettings').statics.workerRange.base, ' ', variables('networkSettings').statics.workerRange.start, ' ', parameters('scaleNumber'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'), ' ', parameters('sharedDiskNumber'), ' ', parameters('_artifactsLocation'))]"
   },
   "resources": [
     {
@@ -189,11 +198,16 @@
             "sku": "[variables('ubuntuOSVersion')]",
             "version": "latest"
           },
-          "dataDisks": [
+          "copy": [
             {
-              "diskSizeGB": "[parameters('sharedDiskSize')]",
-              "lun": 0,
-              "createOption": "Empty"
+              "name": "dataDisks",
+              "count": "[parameters('sharedDiskNumber')]",
+              "input": {
+                "diskSizeGB": "[parameters('sharedDiskSize')]",
+                "lun": "[copyIndex('dataDisks')]",
+                "name": "[concat(variables('vmNameMaster'), '-datadisk', copyIndex('dataDisks'))]",
+                "createOption": "Empty"
+              }
             }
           ],
           "osDisk": {
