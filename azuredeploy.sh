@@ -36,9 +36,7 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
-fi
-
-if [ $NUM_OF_DATA_DISKS -eq 2 ]; then
+else
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/sdd" >> /tmp/azuredeploy.log.$$ 2>&1
