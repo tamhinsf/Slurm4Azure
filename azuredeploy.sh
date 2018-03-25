@@ -31,8 +31,6 @@ ADMIN_PASSWORD=${8}
 NUM_OF_DATA_DISKS=${9}
 TEMPLATE_BASE=${10}
 
-echo $NUM_OF_DATA_DISKS "is this" >> /tmp/azuredeploy.log.$$ 2>&1
-
 # Format and mount the data disk on master, install NFS, and create a cluster wide NFS share
 if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
