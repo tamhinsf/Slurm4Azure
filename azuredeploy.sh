@@ -31,18 +31,21 @@ ADMIN_PASSWORD=${8}
 NUM_OF_DATA_DISKS=${9}
 TEMPLATE_BASE=${10}
 
-# Format and mount the data disk on master, install NFS, and create a cluster wide NFS share
+# Create a cluster wide NFS share directory. Format and mount the data disk on master and install NFS
+sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
 if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
-  sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mkfs -t ext4 /dev/sdd" >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mkdir /data2" >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mount /dev/sdd /data2" >> /tmp/azuredeploy.log.$$ 2>&1
-  echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
+  letterVar=( {c..z} )
+  letterString=""
+  for ((x=0; x<$NUM_OF_DATA_DISKS; x++)); do
+      # echo "$x, ${letterVar[x]}"
+      letterString+="/dev/sd${letterVar[x]} "
+  done
+  sudo mdadm --create /dev/md127 --level 0 --raid-devices $NUM_OF_DATA_DISKS $letterString
+  sudo sh -c "mkfs -t ext4 /dev/md127" >> /tmp/azuredeploy.log.$$ 2>&1
+  echo "/dev/md127 /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 fi
 
 sudo sh -c "mount /data" >> /tmp/azuredeploy.log.$$ 2>&1
