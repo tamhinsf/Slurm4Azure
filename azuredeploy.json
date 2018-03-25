@@ -40,7 +40,7 @@
       "type": "int",
       "defaultValue": 1,
       "minValue": 1,
-      "maxValue": 16,
+      "maxValue": 4,
       "metadata": {
         "description": "Number of shared disks.  Specifying more than 1 will create a single software RAID 0 using all disks."
       }
