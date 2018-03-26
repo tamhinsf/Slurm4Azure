@@ -32,6 +32,7 @@
     "sharedDiskSize": {
       "type": "int",
       "defaultValue": 512,
+      "minValue": 32,
       "maxValue": 4095,
       "metadata": {
         "description": "Size of the shared data disk(s) in GB.  Will exported from the master node and mounted on workers."
@@ -62,6 +63,7 @@
     },
     "scaleNumber": {
       "type": "int",
+      "minValue": 1,
       "defaultValue": 2,
       "metadata": {
         "description": "Number of worker nodes to create."
