@@ -40,7 +40,7 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
 else
 # if [ $NUM_OF_DATA_DISKS -gt 1 ]; then  
   i = 0
-  LETTERVAR=( {c..f} )
+  LETTERVAR="( {c..f} )"
   LETTERSTRING=
   while [ $i -lt $NUM_OF_DATA_DISKS ]
   do      
