@@ -39,9 +39,9 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
 fi
 
 if [ $NUM_OF_DATA_DISKS -gt 1 ]; then  
-  LETTERVAR=\\( {c..f} \\)
-  LETTERSTRING=
+  export LETTERSTRING=""
   for ((x=0; x < $NUM_OF_DATA_DISKS ; x++)); do
+      LETTERVAR=( {c..f} )
       LETTERSTRING+="/dev/sd${LETTERVAR[x]} "
   done
   sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
