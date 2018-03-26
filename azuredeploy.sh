@@ -42,7 +42,8 @@ else
   letterString=
   while [ $j -le $NUM_OF_DATA_DISKS ]
   do   
-    letterString+="$letterString /dev/sd`echo $letterVar | cut -c$j-$j`" >> /tmp/azuredeploy.log.$$ 2>&1
+    letterString+="$letterString /dev/sd`echo $letterVar | cut -c$j-$j`" 
+    echo $letterString >> /tmp/azuredeploy.log.$$ 2>&1
     j=`expr $j + 1`
   done
   echo $letterString >> /tmp/azuredeploy.log.$$ 2>&1
