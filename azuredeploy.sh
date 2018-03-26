@@ -8,7 +8,9 @@
 # Basic info
 date > /tmp/azuredeploy.log.$$ 2>&1
 whoami >> /tmp/azuredeploy.log.$$ 2>&1
-echo $@ >> /tmp/azuredeploy.log.$$ 2>&1
+
+# Log params passed to this script.  You may not want to do this since it includes the password for the slurm admin
+#echo $@ >> /tmp/azuredeploy.log.$$ 2>&1
 
 # Usage
 if [ "$#" -ne 10 ]; then
@@ -38,18 +40,17 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
   j=1
-  LETTERVAR=cdef
-  LETTERSTRING=
+  DEVICE_VAR_LETTERS=cdef
+  DEVICE_NAME_STRING=
   while [ $j -le $NUM_OF_DATA_DISKS ]
   do   
-    LETTERSTRING_TMP="/dev/sd`echo $LETTERVAR | cut -c$j-$j`" 
-    LETTERSTRING=`echo $LETTERSTRING $LETTERSTRING_TMP`
+    DEVICE_NAME_STRING_TMP="/dev/sd`echo $DEVICE_VAR_LETTERS | cut -c$j-$j`" 
+    DEVICE_NAME_STRING=`echo $DEVICE_NAME_STRING $DEVICE_NAME_STRING_TMP`
     j=`expr $j + 1`
   done
-  echo "LETTERSTRING IS " $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
-  sudo sh -c "mkfs -t ext4 /dev/md127" >> /tmp/azuredeploy.log.$$ 2>&1
-  echo "/dev/md127 /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
+  sudo mdadm --create /dev/md0 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $DEVICE_NAME_STRING >> /tmp/azuredeploy.log.$$ 2>&1
+  sudo sh -c "mkfs -t ext4 /dev/md0" >> /tmp/azuredeploy.log.$$ 2>&1
+  echo "/dev/md0 /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 fi
 
 sudo sh -c "mount /data" >> /tmp/azuredeploy.log.$$ 2>&1
