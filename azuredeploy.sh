@@ -44,7 +44,6 @@ else
   do   
     LETTERSTRING_TMP="/dev/sd`echo $LETTERVAR | cut -c$j-$j`" 
     LETTERSTRING=`echo $LETTERSTRING + $LETTERSTRING_TMP`
-    echo "LETTERSTRING IS " $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
     j=`expr $j + 1`
   done
   echo $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
