@@ -38,13 +38,15 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 # fi
 else
-# if [ $NUM_OF_DATA_DISKS -gt 1 ]; then  
+# if [ $NUM_OF_DATA_DISKS -gt 1 ]; then 
   i = 0
-  LETTERVAR="( {c..f} )"
-  LETTERSTRING=
+  letterVar=cdef
+  letterString=
   while [ $i -lt $NUM_OF_DATA_DISKS ]
   do      
-    LETTERSTRING+="/dev/sd${LETTERVAR[x]} "
+    letterString+="/dev/sd${letterVar[i]} "
+    i=`expr $i + 1`
+    echo letterString
   done
   sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/md127" >> /tmp/azuredeploy.log.$$ 2>&1
