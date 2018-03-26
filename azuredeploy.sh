@@ -39,12 +39,12 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
 fi
 
 if [ $NUM_OF_DATA_DISKS -gt 1 ]; then  
-  letterVar=( {c..f} )
-  letterString=
+  LETTERVAR=\\( {c..f} \\)
+  LETTERSTRING=
   for ((x=0; x < $NUM_OF_DATA_DISKS ; x++)); do
-      letterString+="/dev/sd${letterVar[x]} "
+      LETTERSTRING+="/dev/sd${LETTERVAR[x]} "
   done
-  sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $letterString >> /tmp/azuredeploy.log.$$ 2>&1
+  sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/md127" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/md127 /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 fi
