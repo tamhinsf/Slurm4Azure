@@ -37,7 +37,7 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
-  j=0
+  j=1
   letterVar=cdef
   letterString=
   while [ $j -le $NUM_OF_DATA_DISKS ]
