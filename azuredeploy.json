@@ -208,7 +208,6 @@
               "input": {
                 "diskSizeGB": "[parameters('sharedDiskSize')]",
                 "lun": "[copyIndex('dataDisks')]",
-                "name": "[concat(variables('vmNameMaster'), '-datadisk', copyIndex('dataDisks'))]",
                 "createOption": "Empty"
               }
             }
