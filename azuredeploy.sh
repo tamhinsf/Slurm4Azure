@@ -43,9 +43,10 @@ else
   while [ $j -le $NUM_OF_DATA_DISKS ]
   do   
     LETTERSTRING_TMP="/dev/sd`echo $LETTERVAR | cut -c$j-$j`" 
-    LETTERSTRING=`echo $LETTERSTRING + $LETTERSTRING_TMP`
+    LETTERSTRING=`echo $LETTERSTRING $LETTERSTRING_TMP`
     j=`expr $j + 1`
   done
+  echo "LETTERSTRING IS " $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/md127" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/md127 /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
