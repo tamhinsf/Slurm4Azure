@@ -42,7 +42,8 @@ else
   LETTERSTRING=
   while [ $j -le $NUM_OF_DATA_DISKS ]
   do   
-    LETTERSTRING+=$LETTERSTRING "/dev/sd`echo $LETTERVAR | cut -c$j-$j`" 
+    LETTERSTRING_TMP="/dev/sd`echo $LETTERVAR | cut -c$j-$j`" 
+    LETTERSTRING=$LETTERSTRING + $LETTERSTRING_TMP
     echo "LETTERSTRING IS " $LETTERSTRING >> /tmp/azuredeploy.log.$$ 2>&1
     j=`expr $j + 1`
   done
