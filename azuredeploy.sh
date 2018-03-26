@@ -40,9 +40,9 @@ else
   j=0
   letterVar=cdef
   letterString=
-  while [ $j -lt $NUM_OF_DATA_DISKS ]
+  while [ $j -le $NUM_OF_DATA_DISKS ]
   do   
-    letterString+=" /dev/sd${letterVar:$j:1}"
+    letterString+="$letterString /dev/sd`echo $letterVar | cut -c$j-$j`"
     j=`expr $j + 1`
   done
   sudo mdadm --create /dev/md127 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $letterString >> /tmp/azuredeploy.log.$$ 2>&1
