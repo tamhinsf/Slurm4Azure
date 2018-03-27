@@ -33,20 +33,19 @@ ADMIN_PASSWORD=${8}
 NUM_OF_DATA_DISKS=${9}
 TEMPLATE_BASE=${10}
 
+# Get latest packages
+sudo apt-get update
+
 # Create a cluster wide NFS share directory. Format and mount the data disk on master and install NFS
 sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
 if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "/dev/sdc /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
-  j=1
-  DEVICE_VAR_LETTERS=cdefghijklmnopqr
   DEVICE_NAME_STRING=
-  while [ $j -le $NUM_OF_DATA_DISKS ]
-  do   
-    DEVICE_NAME_STRING_TMP="/dev/sd`echo $DEVICE_VAR_LETTERS | cut -c$j-$j`" 
-    DEVICE_NAME_STRING=`echo $DEVICE_NAME_STRING $DEVICE_NAME_STRING_TMP`
-    j=`expr $j + 1`
+  for device in `blkid -s UUID|cut -d " " -f1|tr -d ':' |grep -v "/dev/sda1\|/dev/sdb1"`; do 
+   DEVICE_NAME_STRING_TMP=`echo $device`
+   DEVICE_NAME_STRING=`echo $DEVICE_NAME_STRING $DEVICE_NAME_STRING_TMP`
   done
   sudo mdadm --create /dev/md0 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $DEVICE_NAME_STRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/md0" >> /tmp/azuredeploy.log.$$ 2>&1
