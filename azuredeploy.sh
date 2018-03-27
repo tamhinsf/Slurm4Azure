@@ -42,9 +42,10 @@ if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
   echo "UUID=`blkid -s UUID /dev/sdc | cut -d '"' -f2` /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
+  sudo apt-get install lsscsi -y
   DEVICE_NAME_STRING=
-  for device in `blkid -s UUID|cut -d " " -f1|tr -d ':' |grep -v "/dev/sda1\|/dev/sdb1"`; do 
-   DEVICE_NAME_STRING_TMP=`echo $device`
+  for device in `lsscsi |grep -v "/dev/sda \|/dev/sdb \|/dev/sr0 " | cut -d "/" -f3`; do 
+   DEVICE_NAME_STRING_TMP=`echo /dev/$device`
    DEVICE_NAME_STRING=`echo $DEVICE_NAME_STRING $DEVICE_NAME_STRING_TMP`
   done
   sudo mdadm --create /dev/md0 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $DEVICE_NAME_STRING >> /tmp/azuredeploy.log.$$ 2>&1
