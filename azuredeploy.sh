@@ -40,7 +40,7 @@ sudo apt-get update
 sudo sh -c "mkdir /data" >> /tmp/azuredeploy.log.$$ 2>&1
 if [ $NUM_OF_DATA_DISKS -eq 1 ]; then
   sudo sh -c "mkfs -t ext4 /dev/sdc" >> /tmp/azuredeploy.log.$$ 2>&1
-  echo "`blkid -s UUID /dev/sdc | cut -d " " -f2` /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
+  echo "UUID=`blkid -s UUID /dev/sdc | cut -d '"' -f2` /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 else
   DEVICE_NAME_STRING=
   for device in `blkid -s UUID|cut -d " " -f1|tr -d ':' |grep -v "/dev/sda1\|/dev/sdb1"`; do 
@@ -49,7 +49,7 @@ else
   done
   sudo mdadm --create /dev/md0 --level 0 --raid-devices=$NUM_OF_DATA_DISKS $DEVICE_NAME_STRING >> /tmp/azuredeploy.log.$$ 2>&1
   sudo sh -c "mkfs -t ext4 /dev/md0" >> /tmp/azuredeploy.log.$$ 2>&1
-  echo "`blkid -s UUID /dev/md0 | cut -d " " -f2` /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
+  echo "UUID=`blkid -s UUID /dev/md0 | cut -d '"' -f2` /data ext4  defaults,discard 0 0" | sudo tee -a /etc/fstab >> /tmp/azuredeploy.log.$$ 2>&1
 fi
 
 sudo sh -c "mount /data" >> /tmp/azuredeploy.log.$$ 2>&1
