@@ -123,7 +123,7 @@ sudo chown slurm /var/spool/slurm
 # Download slurm.conf and fill in the node info
 SLURMCONF=/data/tmp/slurm.conf
 wget $TEMPLATE_BASE/slurm.template.conf -O $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
-#sed -i -- 's/__MASTERNODE__/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+sed -i -- 's/__MASTERNODE__/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 lastvm=`expr $NUM_OF_VM - 1`
 sed -i -- 's/__WORKERNODES__/'"$WORKER_NAME"'[0-'"$lastvm"']/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 #sed -i -- 's/__NODECPUS__/'"CPUs=`nproc --all`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
