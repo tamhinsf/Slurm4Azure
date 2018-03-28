@@ -126,9 +126,9 @@ wget $TEMPLATE_BASE/slurm.template.conf -O $SLURMCONF >> /tmp/azuredeploy.log.$$
 sed -i -- 's/__MASTERNODE__/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 lastvm=`expr $NUM_OF_VM - 1`
 sed -i -- 's/__WORKERNODES__/'"$WORKER_NAME"'[0-'"$lastvm"']/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
-#sed -i -- 's/__NODECPUS__/'"CPUs=`nproc --all`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
-#sed -i -- 's/__NODERAM__/'"RealMemory=`free -m | awk '/Mem:/{print $2}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
-#sed -i -- 's/__NODETHREADS__/'"ThreadsPerCore=`lscpu|grep Thread|cut -d ":" -f 2|awk '{$1=$1;print}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+sed -i -- 's/__NODECPUS__/'"CPUs=`nproc --all`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+sed -i -- 's/__NODERAM__/'"RealMemory=`free -m | awk '/Mem:/{print $2}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+sed -i -- 's/__NODETHREADS__/'"ThreadsPerCore=`lscpu|grep Thread|cut -d ":" -f 2|awk '{$1=$1;print}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 sudo cp -f $SLURMCONF /etc/slurm-llnl/slurm.conf >> /tmp/azuredeploy.log.$$ 2>&1
 sudo chown slurm /etc/slurm-llnl/slurm.conf >> /tmp/azuredeploy.log.$$ 2>&1
 sudo chmod o+w /var/spool # Write access for slurmctld log. Consider switch log file to another location
