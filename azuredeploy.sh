@@ -13,8 +13,8 @@ whoami >> /tmp/azuredeploy.log.$$ 2>&1
 #echo $@ >> /tmp/azuredeploy.log.$$ 2>&1
 
 # Usage
-if [ "$#" -ne 10 ]; then
-  echo "Usage: $0 MASTER_NAME MASTER_IP WORKER_NAME WORKER_IP_BASE WORKER_IP_START NUM_OF_VM ADMIN_USERNAME ADMIN_PASSWORD NUM_OF_DATA_DISKS TEMPLATE_BASE" >> /tmp/azuredeploy.log.$$
+if [ "$#" -ne 11 ]; then
+  echo "Usage: $0 MASTER_NAME MASTER_IP MASTER_AS_WORKER WORKER_NAME WORKER_IP_BASE WORKER_IP_START NUM_OF_VM ADMIN_USERNAME ADMIN_PASSWORD NUM_OF_DATA_DISKS TEMPLATE_BASE" >> /tmp/azuredeploy.log.$$
   exit 1
 fi
 
@@ -24,14 +24,15 @@ fi
 # Parameters
 MASTER_NAME=${1}
 MASTER_IP=${2}
-WORKER_NAME=${3}
-WORKER_IP_BASE=${4}
-WORKER_IP_START=${5}
-NUM_OF_VM=${6}
-ADMIN_USERNAME=${7}
-ADMIN_PASSWORD=${8}
-NUM_OF_DATA_DISKS=${9}
-TEMPLATE_BASE=${10}
+MASTER_AS_WORKER=${3}
+WORKER_NAME=${4}
+WORKER_IP_BASE=${5}
+WORKER_IP_START=${6}
+NUM_OF_VM=${7}
+ADMIN_USERNAME=${8}
+ADMIN_PASSWORD=${9}
+NUM_OF_DATA_DISKS=${10}
+TEMPLATE_BASE=${11}
 
 # Get latest packages
 sudo apt-get update
@@ -124,6 +125,11 @@ sudo chown slurm /var/spool/slurm
 SLURMCONF=/data/tmp/slurm.conf
 wget $TEMPLATE_BASE/slurm.template.conf -O $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 sed -i -- 's/__MASTERNODE__/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+if [ MASTER_AS_WORKER -eq "true"];then
+  sed -i -- 's/__MASTER_AS_WORKER_NODE__,/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+else
+  sed -i -- 's/__MASTER_AS_WORKER_NODE__,/'""'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+fi
 lastvm=`expr $NUM_OF_VM - 1`
 sed -i -- 's/__WORKERNODES__/'"$WORKER_NAME"'[0-'"$lastvm"']/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 

@@ -15,6 +15,13 @@
         "description": "Admin password. Pick a complex password with uppercase letters, lowercase letters, digits, and symbols. The password should not be longer than 16. Otherwise you'll get a BadRequest error."
       }
     },
+    "vmHeadNodeAsWorker": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Make the master node also a worker node. If true, worker nodes must be the same as vmHeadNodeSize (below)."
+      }
+    },
     "vmHeadNodeSize": {
       "type": "string",
       "defaultValue": "Standard_E2_v3",
@@ -113,7 +120,7 @@
       }
     },
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets/', variables('networkSettings').virtualNetworkName, variables('networkSettings').subnet.dse.name)]",
-    "installationCLI": "[concat('sh azuredeploy.sh ', variables('vmNameMaster'), ' ', variables('networkSettings').statics.master, ' ', variables('vmNameWorker'), ' ', variables('networkSettings').statics.workerRange.base, ' ', variables('networkSettings').statics.workerRange.start, ' ', parameters('scaleNumber'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'), ' ', parameters('sharedDiskNumber'), ' ', parameters('_artifactsLocation'))]"
+    "installationCLI": "[concat('sh azuredeploy.sh ', variables('vmNameMaster'), ' ', variables('networkSettings').statics.master, ' ', parameters('vmHeadNodeAsWorker'), ' ', variables('vmNameWorker'), ' ', variables('networkSettings').statics.workerRange.base, ' ', variables('networkSettings').statics.workerRange.start, ' ', parameters('scaleNumber'), ' ', parameters('adminUsername'), ' ', parameters('adminPassword'), ' ', parameters('sharedDiskNumber'), ' ', parameters('_artifactsLocation'))]"
   },
   "resources": [
     {
