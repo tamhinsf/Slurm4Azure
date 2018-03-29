@@ -135,8 +135,6 @@ WORKER_RAM=`sudo -u $ADMIN_USERNAME ssh worker0 '( free -m )' | awk '/Mem:/{prin
 sed -i -- 's/__NODERAM__/'"RealMemory=`echo $WORKER_RAM`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 #sed -i -- 's/__NODERAM__/'"RealMemory=`free -m | awk '/Mem:/{print $2}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 
-# sudo -u $ADMIN_USERNAME ssh worker0 '( lscpu|grep Thread|cut -d ":" -f 2 )' >> /tmp/azuredeploy.log.$$ 2>&1
-# SLURM_THREADS=`cat /tmp/nodethreads.slurm | awk '{$1=$1;print}'` >> /tmp/azuredeploy.log.$$ 2>&1
 WORKER_THREADS=`sudo -u $ADMIN_USERNAME ssh worker0 '( lscpu|grep Thread|cut -d ":" -f 2 )'| awk '{$1=$1;print}'` >> /tmp/azuredeploy.log.$$ 2>&1
 sed -i -- 's/__NODETHREADS__/'"ThreadsPerCore=`echo $WORKER_THREADS`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 #sed -i -- 's/__NODETHREADS__/'"ThreadsPerCore=`lscpu|grep Thread|cut -d ":" -f 2|awk '{$1=$1;print}'`"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
