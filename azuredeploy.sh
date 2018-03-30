@@ -125,8 +125,8 @@ sudo chown slurm /var/spool/slurm
 SLURMCONF=/data/tmp/slurm.conf
 wget $TEMPLATE_BASE/slurm.template.conf -O $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 sed -i -- 's/__MASTERNODE__/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
-if [ $MASTER_AS_WORKER -eq "True"];then
-  sed -i -- 's/__MASTER_AS_WORKER_NODE__,/'"$MASTER_NAME"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
+if [ "$MASTER_AS_WORKER" -eq "True"];then
+  sed -i -- 's/__MASTER_AS_WORKER_NODE__,/'"$MASTER_NAME,"'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 else
   sed -i -- 's/__MASTER_AS_WORKER_NODE__,/'""'/g' $SLURMCONF >> /tmp/azuredeploy.log.$$ 2>&1
 fi
