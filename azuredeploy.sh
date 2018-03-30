@@ -10,7 +10,7 @@ date > /tmp/azuredeploy.log.$$ 2>&1
 whoami >> /tmp/azuredeploy.log.$$ 2>&1
 
 # Log params passed to this script.  You may not want to do this since it includes the password for the slurm admin
-#echo $@ >> /tmp/azuredeploy.log.$$ 2>&1
+echo $@ >> /tmp/azuredeploy.log.$$ 2>&1
 
 # Usage
 if [ "$#" -ne 11 ]; then
