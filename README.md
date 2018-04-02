@@ -29,7 +29,10 @@ Begin deploying your Slurm cluster by clicking the Deploy to Azure button below.
     * Make sure the VM Series you enter is available in the Azure region you target.  Need help? The Azure VM Comparision website will show you the VMs available in a given region  https://azureprice.net/
     * Optionally, you can enable Accelerated Networking if the VM series you select supports it.  Not sure if it does?  Check the [list of VMs that support Acclerated Networking](https://docs.microsoft.com/en-us/azure/virtual-network/create-vm-accelerated-networking-cli#supported-vm-instances)
     * WARNING: If you enable Accelerated Networking on a VM series that doesn't support it, your deployment will fail.
-* Size of the cluster-wide shared disk
+* Size of the cluster-wide shared disk, which we'll mount on the master and share to worker nodes.
+    * WARNING: Optionally, if you make your master node also a worker node, then the VM series you pick must be the same for both.  In the future, we'll add validation to ensure that you don't pick VMs from different series.
+    * Azure supports data disks of up to 4TB (4095 GB).  If you need a shared disk larger than this size, you have the option of specifying multiple data disks.  We'll merge these drives into a single, software-based RAID 0.
+    * The number of data disks that you can attach to a VM varies based upon the VM series and size.  Don't know what your VM supports?  Check the [list of Linux VMs on Azure](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/sizes) 
 * Number of worker nodes
 
 Before you deploy, you'll need to Agree to the terms and click Purchase to begin deployment.  As a reminder, you're not actually paying to use this free template. However, the resources that you deploy and make use of will be billed to your subscription.
@@ -63,9 +66,3 @@ Once you've begun your deployment, you can remain in the Azure Portal or navigat
     * There should also be a folder called "canu", which contains an open source genomics application of the same name.  You can use canu to validate the functionality of your Slurm cluster.  
       * No need for it? It can be safely removed.  
       * Want to give it a try?  Follow the instructions here: http://canu.readthedocs.io/en/latest/quick-start.html
-
-
-
-
-  
-
