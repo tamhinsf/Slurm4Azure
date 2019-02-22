@@ -124,6 +124,19 @@
   },
   "resources": [
     {
+      "apiVersion": "2018-02-01",
+      "name": "pid-23558be0-8a9c-5716-945f-90226ab6a404", 
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+            "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+            "contentVersion": "1.0.0.0",
+            "resources": []
+        }
+      }
+    },
+    {
       "apiVersion": "2016-09-01",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('networkSettings').virtualNetworkName]",
